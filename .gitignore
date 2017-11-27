@@ -1,0 +1,8 @@
+# output folders
+target/
+build/
+output/
+
+#logs folder and files
+log/
+*.log
