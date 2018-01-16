@@ -1,4 +1,4 @@
-package com.frauas.his.rt.controller;
+package com.frauas.his.rt.utils;
 
 import com.frauas.his.rt.utils.Constants;
 

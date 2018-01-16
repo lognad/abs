@@ -1,13 +1,12 @@
 package com.frauas.his.rt.gui;
 
-import com.frauas.his.rt.controller.Calculation;
+import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.controller.WheelController;
 import com.frauas.his.rt.models.Wheel;
 import com.frauas.his.rt.utils.Constants;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
@@ -15,9 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Main implements ActionListener {
 

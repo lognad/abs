@@ -3,6 +3,7 @@ package com.frauas.his.rt.controller;
 import com.frauas.his.rt.gui.Chart;
 import com.frauas.his.rt.gui.Main;
 import com.frauas.his.rt.models.Wheel;
+import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.utils.Constants;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.time.Millisecond;
