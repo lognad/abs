@@ -143,51 +143,90 @@
                   </component>
                 </children>
               </grid>
-              <grid id="99c84" binding="jpHeader" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+              <grid id="99c84" binding="jpHeader" layout-manager="GridLayoutManager" row-count="2" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints border-constraint="North"/>
                 <properties/>
                 <border type="none"/>
                 <children>
                   <component id="d8985" class="javax.swing.JLabel">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="Stopping Distance (m)"/>
                     </properties>
                   </component>
                   <component id="c5033" class="javax.swing.JLabel" binding="lblStoppingDistance">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="0.0"/>
                     </properties>
                   </component>
-                  <hspacer id="86fdc">
-                    <constraints/>
-                  </hspacer>
                   <component id="6826" class="javax.swing.JLabel">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="Stopping Time (s)"/>
                     </properties>
                   </component>
                   <component id="d9170" class="javax.swing.JLabel" binding="lblStoppingTime">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="0.0"/>
                     </properties>
                   </component>
-                  <hspacer id="3810">
-                    <constraints/>
-                  </hspacer>
                   <component id="e6381" class="javax.swing.JLabel">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="Deceleration"/>
                     </properties>
                   </component>
                   <component id="951fc" class="javax.swing.JLabel" binding="lblDeceleration">
-                    <constraints/>
+                    <constraints>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
                     <properties>
                       <text value="0"/>
+                    </properties>
+                  </component>
+                  <component id="7128b" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Stopping Distance w/o ABS (m)"/>
+                    </properties>
+                  </component>
+                  <component id="49e8d" class="javax.swing.JLabel" binding="lblStoppingDistNoABS">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="0.0"/>
+                    </properties>
+                  </component>
+                  <component id="7bc69" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Stopping Time w/o ABS(s)"/>
+                    </properties>
+                  </component>
+                  <component id="4f551" class="javax.swing.JLabel" binding="lblStoppingTimeNoABS">
+                    <constraints>
+                      <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="0.0"/>
                     </properties>
                   </component>
                 </children>

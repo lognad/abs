@@ -19,6 +19,10 @@ public class Calculation {
     public static double calculateDeceleration(double initialVelocity, double distance) {
         return -((initialVelocity * initialVelocity) / (2 * distance));
     }
+//
+//    public static double calculateStoppingDistanceNoABS(double velocity, double coefficientOfFriction){
+//
+//    }
 
     public static double convertMphToKmph(double velocityMps) {
         return velocityMps * 18 / 5;

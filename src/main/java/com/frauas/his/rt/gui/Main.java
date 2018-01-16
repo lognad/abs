@@ -40,6 +40,8 @@ public class Main implements ActionListener {
     private JLabel lblStoppingDistance;
     private JLabel lblStoppingTime;
     private JLabel lblDeceleration;
+    private JLabel lblStoppingDistNoABS;
+    private JLabel lblStoppingTimeNoABS;
 
     private Wheel wheel;
     private WheelController controller;
@@ -115,20 +117,27 @@ public class Main implements ActionListener {
             this.series = new TimeSeries("Random Data", Millisecond.class);
 
             double coeff = 0d;
+            double coeffK = 0d;
 
             if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.DRY.ordinal()) {
                 coeff = Constants.ROAD_CONDITIONS.DRY.getCoeff();
+                coeffK = Constants.KINETIC_FRICTION_DRY_ROAD;
             } else if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.WET.ordinal()) {
                 coeff = Constants.ROAD_CONDITIONS.WET.getCoeff();
+                coeffK = Constants.KINETIC_FRICTION_WET_ROAD;
             } else if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.ICY.ordinal()) {
                 coeff = Constants.ROAD_CONDITIONS.ICY.getCoeff();
+                coeffK = Constants.KINETIC_FRICTION_ICY_ROAD;
             }
 
             System.out.println("COEFF: " + coeff);
 
             //  STOP EXISTING THREAD IF ANY.
             if (this.controller != null) this.controller.killThread();
-            this.controller = new WheelController(this.wheel, this.series, coeff, jpContents, jpHeader);
+            this.controller = new WheelController(this.wheel, this.series, coeff, coeffK, jpContents, jpHeader);
+
+            jpContents.removeAll();
+            jpContents.revalidate();
 
             td = new Thread(this.controller);
             td.start();

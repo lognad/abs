@@ -18,10 +18,11 @@ import java.util.Timer;
 import static java.lang.Thread.sleep;
 
 public class WheelController implements Runnable {
+    private final double coeffK;
     private boolean isRunning;
     private double coeff;
     private boolean pulse = true;
-    public static long intervalPeriod = 2;
+    public static long intervalPeriod = 15;
 
     private double initialVel;
 
@@ -48,10 +49,11 @@ public class WheelController implements Runnable {
         this.intervalPeriod = intervalPeriod;
     }
 
-    public WheelController(Wheel wheel, TimeSeries series, double coeff, JPanel p, JPanel h) {
+    public WheelController(Wheel wheel, TimeSeries series, double coeff, double coeffK, JPanel p, JPanel h) {
         this.wheel = wheel;
         this.series = series;
         this.coeff = coeff;
+        this.coeffK = coeffK;
         this.vVehicle = wheel.getVelocity();
         this.initialVel = wheel.getVelocity();
 
@@ -61,18 +63,34 @@ public class WheelController implements Runnable {
 
     @Override
     public void run() {
+        //  WITH ABS
+        double dABS = Calculation.calculateStoppingDistance(initialVel, coeff);
+        double tABS = Calculation.calculateStoppingTime(initialVel, coeff);
+        double decABS = Calculation.calculateDeceleration(initialVel, dABS);
+        decreaseInSpeedPerPulse = Math.abs(decABS) / intervalPeriod;
 
-        double d = Calculation.calculateStoppingDistance(initialVel, coeff);
-        double t = Calculation.calculateStoppingTime(initialVel, coeff);
-        double dec = Calculation.calculateDeceleration(initialVel, d);
-        decreaseInSpeedPerPulse = Math.abs(dec) / intervalPeriod;
+        //  WITHOUT ABS.
+        double d = Calculation.calculateStoppingDistance(initialVel, coeffK);
+        double t = Calculation.calculateStoppingTime(initialVel, coeffK);
+//        double dec = Calculation.calculateDeceleration(initialVel, dABS);
+//        decreaseInSpeedPerPulse = Math.abs(decABS) / intervalPeriod;
 
-        System.out.println("d: " + d);
-        System.out.println("t: " + t);
-        System.out.println("dec: " + dec);
+        System.out.println("d: " + dABS);
+        System.out.println("t: " + tABS);
+        System.out.println("dec: " + decABS);
         System.out.println("decInSpeed" + ": " + decreaseInSpeedPerPulse);
 
         this.isRunning = true;
+
+
+        //  REMOVE ALL EXCEPT THE FIRST COMPONENT. I.E. DYNAMIC GRAPH
+        for (int i = 0; i < this.jpContent.getComponentCount(); i++) {
+            if (i == 0) continue;
+            this.jpContent.remove(i);
+        }
+
+        this.jpContent.revalidate();
+        this.jpContent.repaint();
 
         while (wheel.getVelocity() > 0) {
 //            System.out.println("CP1: " + Calculation.convertMphToKmph(wheel.getVelocity()));
@@ -97,12 +115,21 @@ public class WheelController implements Runnable {
         }
 
         //  SHOW OTHER STATIC CHARTS HERE.
-        final Chart demo = new Chart("SPEED VS TIME", vVehicleOutput);
-        ChartPanel cp = new ChartPanel(demo.createChart(vVehicleOutput,
-                "Speed vs Time",
+        final Chart chartWheel = new Chart("SPEED VS TIME", vOutput);
+        ChartPanel cp = new ChartPanel(chartWheel.createChart(vOutput,
+                "Wheel",
                 "Time",
                 "Speed"));
-        cp.setPreferredSize(new Dimension(600, 300));
+        cp.setPreferredSize(new Dimension(500, 300));
+
+
+        final Chart chartVehicle = new Chart("SPEED VS TIME", vVehicleOutput);
+        ChartPanel cp1 = new ChartPanel(chartWheel.createChart(vVehicleOutput,
+                "Vehicle",
+                "Time",
+                "Speed"));
+        cp1.setPreferredSize(new Dimension(500, 300));
+
 
         //  REMOVE ALL EXCEPT THE FIRST COMPONENT. I.E. DYNAMIC GRAPH
         for (int i = 0; i < this.jpContent.getComponentCount(); i++) {
@@ -112,14 +139,22 @@ public class WheelController implements Runnable {
         }
 
         this.jpContent.add(cp);
+        this.jpContent.add(cp1);
         this.jpContent.revalidate();
 
+        //  WITH ABS.
         JLabel lblSd = (JLabel) this.jpHeader.getComponents()[1];
-        lblSd.setText(String.valueOf(Main.df.format(d)));
-        JLabel lblSt = (JLabel) this.jpHeader.getComponents()[4];
-        lblSt.setText(String.valueOf(Main.df.format(t)));
-        JLabel lblD = (JLabel) this.jpHeader.getComponents()[7];
-        lblD.setText(String.valueOf(Main.df.format(dec)));
+        lblSd.setText(String.valueOf(Main.df.format(dABS)));
+        JLabel lblSt = (JLabel) this.jpHeader.getComponents()[3];
+        lblSt.setText(String.valueOf(Main.df.format(tABS)));
+        JLabel lblD = (JLabel) this.jpHeader.getComponents()[5];
+
+        //  WITHOUT ABS.
+        lblD.setText(String.valueOf(Main.df.format(decABS)));
+        JLabel lblSdWOABS = (JLabel) this.jpHeader.getComponents()[7];
+        lblSdWOABS.setText(String.valueOf(Main.df.format(d)));
+        JLabel lblStWOABS = (JLabel) this.jpHeader.getComponents()[9];
+        lblStWOABS.setText(String.valueOf(Main.df.format(t)));
         jpHeader.revalidate();
     }
 
@@ -176,10 +211,6 @@ public class WheelController implements Runnable {
 
         // schedules the task to be run in an interval
         timer.scheduleAtFixedRate(task, delay, (1 * 1000) / intervalPeriod);
-
-
-        //DUMMY NOW
-//        return vVehicle - 5;
     }
 
     public Wheel getWheel() {
