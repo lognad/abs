@@ -7,21 +7,22 @@ import com.frauas.his.rt.utils.Constants;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Main implements ActionListener {
+
+    public static DecimalFormat df = new DecimalFormat(".##");
+
     private JPanel jpParent;
     private JScrollPane jspMain;
     private JPanel jpContainer;
@@ -40,6 +41,9 @@ public class Main implements ActionListener {
     private JButton btnStart;
     private JLabel lblInitialVelocity;
     private JTextField txtInitialVelocity;
+    private JLabel lblStoppingDistance;
+    private JLabel lblStoppingTime;
+    private JLabel lblDeceleration;
 
     private Wheel wheel;
     private WheelController controller;
@@ -70,44 +74,25 @@ public class Main implements ActionListener {
 
     public void initialize() {
         //  POPULATE COMBOBOX.
-        cbRoadType.setModel(new DefaultComboBoxModel(Constants.ROAD_TYPES.values()));
+//        cbRoadType.setModel(new DefaultComboBoxModel(Constants.ROAD_TYPES.values()));
+        cbRoadType.setVisible(false);
+        lblRoadType.setVisible(false);
         cbRoadCondition.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
 
         //  SET LISTENERS TO BUTTONS.
         btnStart.addActionListener(this);
         btnBrake.addActionListener(this);
 
-//        Calculation calc = new Calculation();
-//        wheel = new Wheel(0, 0);
-//        wheel.setAbsActive(true);
-//        double coeff = Constants.STATIC_FRICTION_DRY_ROAD;
-//        double stoppingDistance = 0;
-//        double deceleration = 0;
-//        double stoppingTime = 0;
-//
-//        DecimalFormat df = new DecimalFormat("#.##");
-//
-//        for (int i = 0; i <= 50; i++) {
-//            wheel.setVelocity(i);
-//            stoppingDistance = Calculation.calculateStoppingDistance(wheel.getVelocity(), coeff);
-//            deceleration = Calculation.calculateDeceleration(wheel.getVelocity(), stoppingDistance);
-////            stoppingTime = Calculation.calculateStoppingTime(wheel.getVelocity(), deceleration);
-//            System.out.println(df.format(stoppingDistance) + ",\t" + df.format(stoppingTime));
-//        }
-    }
-
-    public void brake() {
-        // ACTIVATE ABS ONLY IF THE SPEED OF THE WHEEL IS GREATER THAN 20KMPH
-        if (Calculation.convertMphToKmph(wheel.getVelocity()) > 20.0d) {
-            wheel.setAbsActive(true);
-        } else {
-            wheel.setAbsActive(false);
-        }
-
-        //  APPLY BREAK HERE.
-        do {
-
-        } while (wheel.getVelocity() != 0);
+        JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
+        vbar.addAdjustmentListener(new AdjustmentListener() {
+            @Override
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                vbar.repaint();
+            }
+        });
+//        hbar.setUnitIncrement(2);
+//        hbar.setBlockIncrement(1);
+        jpParent.add(vbar, BorderLayout.EAST);
     }
 
     public static void main(String[] args) {
@@ -121,34 +106,33 @@ public class Main implements ActionListener {
         frame.setVisible(true);
     }
 
-//    private JPanel createGraph() {
-//        List<Double> scores = new ArrayList<Double>();
-//        Random random = new Random();
-//        int maxDataPoints = 40;
-//        int maxScore = 10;
-//        for (int i = 0; i < maxDataPoints; i++) {
-//            scores.add((double) random.nextDouble() * maxScore);
-//        }
-//        GraphPanel graphPanel = new GraphPanel(scores);
-//        graphPanel.setPreferredSize(new Dimension(400, 250));
-//
-//        return graphPanel;
-//    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getActionCommand().equals(btnStart.getText())) {
             System.out.println("Start pressed");
             jpContents.removeAll();
 
-            double initialVelocity = Double.parseDouble(txtInitialVelocity.getText());
+            double initialVelocity = Calculation.convertKmphToMph(Double.parseDouble(txtInitialVelocity.getText()));
             this.wheel = new Wheel(Double.parseDouble(txtRadiusOfWheel.getText()), Double.parseDouble(txtWeight.getText()));
             this.wheel.setVelocity(initialVelocity);
+
             this.series = new TimeSeries("Random Data", Millisecond.class);
+
+            double coeff = 0d;
+
+            if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.DRY.ordinal()) {
+                coeff = Constants.ROAD_CONDITIONS.DRY.getCoeff();
+            } else if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.WET.ordinal()) {
+                coeff = Constants.ROAD_CONDITIONS.WET.getCoeff();
+            } else if (cbRoadCondition.getSelectedIndex() == Constants.ROAD_CONDITIONS.ICY.ordinal()) {
+                coeff = Constants.ROAD_CONDITIONS.ICY.getCoeff();
+            }
+
+            System.out.println("COEFF: " + coeff);
 
             //  STOP EXISTING THREAD IF ANY.
             if (this.controller != null) this.controller.killThread();
-            this.controller = new WheelController(this.wheel, this.series);
+            this.controller = new WheelController(this.wheel, this.series, coeff, jpContents, jpHeader);
 
             td = new Thread(this.controller);
             td.start();
@@ -156,15 +140,14 @@ public class Main implements ActionListener {
             //  GENERATING TEST SERIES RANDOMLY.
             final TimeSeriesCollection dataset = new TimeSeriesCollection(series);
 
-            DynamicChart chart = new DynamicChart("TESTING");
+            DynamicChart chart = new DynamicChart("");
 
             JFreeChart jChart = chart.createChart(dataset, "Time", "Speed");
             jChart.removeLegend();
             ChartPanel cp = new ChartPanel(jChart);
-
+            cp.setPreferredSize(new Dimension(600, 300));
             //  ADD TO THE PANEL
             jpContents.add(cp);
-//            jpContents.add(cp);
 
             jpContents.revalidate();
 //            //  resize the main jframe.

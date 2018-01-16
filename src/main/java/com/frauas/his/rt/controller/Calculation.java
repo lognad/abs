@@ -11,16 +11,22 @@ public class Calculation {
         return (velocity * velocity) / (2 * coefficientOfFriction * Constants.ACCELERATION_DUE_TO_GRAVITY);
     }
 
-    public static double calculateStoppingTime(double initialVelocity, double deceleration) {
-        return initialVelocity / deceleration;
+    public static double calculateStoppingTime(double initialVelocity, double coefficientOfFriction) {
+        return initialVelocity / (2 * coefficientOfFriction * Constants.ACCELERATION_DUE_TO_GRAVITY);
     }
 
     //  SOMETHING WRONG??
-    public static double calculateDeceleration(double initialVelocity, double stoppingDistance) {
-        return (initialVelocity * initialVelocity) / (2 * stoppingDistance);
+    public static double calculateDeceleration(double initialVelocity, double distance) {
+        return -((initialVelocity * initialVelocity) / (2 * distance));
     }
 
     public static double convertMphToKmph(double velocityMps) {
         return velocityMps * 18 / 5;
     }
+
+    public static double convertKmphToMph(double velocityMps) {
+        return velocityMps * 5 / 18;
+    }
+
+
 }

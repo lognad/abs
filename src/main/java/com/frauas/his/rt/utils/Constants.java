@@ -9,7 +9,9 @@ public class Constants {
     public static double KINETIC_FRICTION_ICY_ROAD = 0.2d;
 
     public static double ACCELERATION_DUE_TO_GRAVITY = 9.8;
-    public static double THRESHOLD_SLIP = 0.2d;
+    public static double MINIMUM_THRESHOLD_SLIP_RATIO = 0.1d;
+    public static double MAXIMUM_THRESHOLD_SLIP_RATIO = 0.3d;
+
 
 
     public enum ROAD_CONDITIONS {
