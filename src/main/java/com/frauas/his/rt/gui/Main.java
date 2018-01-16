@@ -42,6 +42,9 @@ public class Main implements ActionListener {
     private JLabel lblDeceleration;
     private JLabel lblStoppingDistNoABS;
     private JLabel lblStoppingTimeNoABS;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
 
     private Wheel wheel;
     private WheelController controller;
