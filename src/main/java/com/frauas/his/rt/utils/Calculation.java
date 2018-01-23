@@ -24,13 +24,16 @@ public class Calculation {
 //
 //    }
 
-    public static double convertMphToKmph(double velocityMps) {
+    public static double convertMpsToKmph(double velocityMps) {
         return velocityMps * 18 / 5;
     }
 
-    public static double convertKmphToMph(double velocityMps) {
+    public static double convertKmphToMps(double velocityMps) {
         return velocityMps * 5 / 18;
     }
 
 
+    public static double calculateDistanceTravelled(double vVehicle, int time) {
+        return vVehicle * time;
+    }
 }

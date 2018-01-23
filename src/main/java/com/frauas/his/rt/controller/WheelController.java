@@ -82,7 +82,6 @@ public class WheelController implements Runnable {
 
         this.isRunning = true;
 
-
         //  REMOVE ALL EXCEPT THE FIRST COMPONENT. I.E. DYNAMIC GRAPH
         for (int i = 0; i < this.jpContent.getComponentCount(); i++) {
             if (i == 0) continue;
@@ -93,7 +92,7 @@ public class WheelController implements Runnable {
         this.jpContent.repaint();
 
         while (wheel.getVelocity() > 0) {
-//            System.out.println("CP1: " + Calculation.convertMphToKmph(wheel.getVelocity()));
+//            System.out.println("CP1: " + Calculation.convertMpsToKmph(wheel.getVelocity()));
 //        while (true) {
             if (!this.isRunning)
                 break;
@@ -104,7 +103,7 @@ public class WheelController implements Runnable {
                 applyBrake();
 //                this.wheel.setVelocity(vWheel);
             }
-            this.series.addOrUpdate(new Millisecond(), Calculation.convertMphToKmph(vVehicle));
+            this.series.addOrUpdate(new Millisecond(), Calculation.convertMpsToKmph(vVehicle));
 
             //  PAUSE FOR SOME TIME.
             try {
@@ -124,7 +123,7 @@ public class WheelController implements Runnable {
 
 
         final Chart chartVehicle = new Chart("SPEED VS TIME", vVehicleOutput);
-        ChartPanel cp1 = new ChartPanel(chartWheel.createChart(vVehicleOutput,
+        ChartPanel cp1 = new ChartPanel(chartVehicle.createChart(vVehicleOutput,
                 "Vehicle",
                 "Time",
                 "Speed"));
@@ -195,11 +194,11 @@ public class WheelController implements Runnable {
                 pulse = !pulse;
 
                 //  UPDATE
-//                series.addOrUpdate(new Millisecond(), Calculation.convertMphToKmph(vVehicle));
+//                series.addOrUpdate(new Millisecond(), Calculation.convertMpsToKmph(vVehicle));
                 wheel.setVelocity(vWheel);
-                System.out.println(Calculation.convertMphToKmph(vWheel)
+                System.out.println(Calculation.convertMpsToKmph(vWheel)
                         + "\t"
-                        + Calculation.convertMphToKmph(vVehicle));
+                        + Calculation.convertMpsToKmph(vVehicle));
 
                 //  SAVE OUTPUT.
                 vOutput.add(vWheel);

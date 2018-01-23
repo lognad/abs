@@ -29,6 +29,21 @@ public class Constants {
         }
     }
 
+    public enum ROAD_CONDITIONS_KINETIC {
+        DRY(0.65),
+        WET(0.4),
+        ICY(0.2);
+
+        private double coeff;
+        ROAD_CONDITIONS_KINETIC(double coeff){
+            this.coeff = coeff;
+        }
+
+        public double getCoeff(){
+            return this.coeff;
+        }
+    }
+
     public enum ROAD_TYPES {
         DIRT,
         GRAVELLED,

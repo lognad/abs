@@ -5,6 +5,7 @@ import com.frauas.his.rt.controller.WheelController;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.time.FixedMillisecond;
 import org.jfree.data.time.Second;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Chart extends JPanel {
+    XYDataset ds;
+
     public Chart(final String title) {
 //        super(title);
         final XYDataset dataset = createDataset();
@@ -77,13 +80,56 @@ public class Chart extends JPanel {
         return new TimeSeriesCollection(series);
     }
 
-    public XYDataset createDataset(List<Double> d, String title) {
+    public void addDataset(List<Double> d, String title) {
+        final TimeSeries series = new TimeSeries(title);
+        int pulseRate = 15;
+        fm = new FixedMillisecond(((1 * 60) / pulseRate));
+        d.forEach(y -> {
+            series.add(fm, Calculation.convertMpsToKmph(y));
+            fm = (FixedMillisecond) fm.next();
+        });
+    }
+
+    FixedMillisecond fm;
+
+    public XYDataset createDataset(List<Double> v, List<Double> vABS, String title) {
+        final TimeSeries series = new TimeSeries(title);
+        final TimeSeries series1 = new TimeSeries(title);
+
+        int pulseRate = 15;
+        List<Double> x = v;
+        Second s = new Second();
+        fm = new FixedMillisecond(((1 * 60) / pulseRate));
+
+
+        x.forEach(y -> {
+//            series.add(current, Calculation.convertMpsToKmph(y));
+//            current = (Second) current.next();
+            series.add(fm, Calculation.convertMpsToKmph(y));
+            series1.add(fm, Calculation.convertMpsToKmph(vABS.get(x.indexOf(y))));
+            fm = (FixedMillisecond) fm.next();
+        });
+        TimeSeriesCollection ds = new TimeSeriesCollection();
+        ds.addSeries(series);
+        ds.addSeries(series1);
+
+        return ds;
+    }
+
+    public XYDataset createDataset(List<Double> v, String title) {
         final TimeSeries series = new TimeSeries(title);
 
-        List<Double> x = d;
+        int pulseRate = 15;
+        List<Double> x = v;
+        Second s = new Second();
+        fm = new FixedMillisecond(((1 * 60) / pulseRate));
+
+
         x.forEach(y -> {
-            series.add(current, Calculation.convertMphToKmph(y));
-            current = (Second) current.next();
+//            series.add(current, Calculation.convertMpsToKmph(y));
+//            current = (Second) current.next();
+            series.add(fm, Calculation.convertMpsToKmph(y));
+            fm = (FixedMillisecond) fm.next();
         });
 
         return new TimeSeriesCollection(series);
@@ -100,8 +146,22 @@ public class Chart extends JPanel {
                 false);
     }
 
+    public JFreeChart createChart(List<Double> dataset, List<Double> absDataset, String title, String xLabel, String yLabel) {
+
+        ds = createDataset(dataset, absDataset, title);
+        return ChartFactory.createTimeSeriesChart(
+                title,
+                xLabel,
+                yLabel,
+                ds,
+                false,
+                true,
+                false);
+    }
+
     public JFreeChart createChart(List<Double> dataset, String title, String xLabel, String yLabel) {
-        XYDataset ds = createDataset(dataset, title);
+
+        ds = createDataset(dataset, title);
         return ChartFactory.createTimeSeriesChart(
                 title,
                 xLabel,

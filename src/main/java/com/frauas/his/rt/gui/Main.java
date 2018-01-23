@@ -1,5 +1,6 @@
 package com.frauas.his.rt.gui;
 
+import com.frauas.his.rt.controller.WheelController1;
 import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.controller.WheelController;
 import com.frauas.his.rt.models.Wheel;
@@ -42,12 +43,18 @@ public class Main implements ActionListener {
     private JLabel lblDeceleration;
     private JLabel lblStoppingDistNoABS;
     private JLabel lblStoppingTimeNoABS;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
+    private JTextField txtRoadDistance0;
+    private JTextField txtRoadDistance1;
+    private JTextField txtRoadDistance2;
+    private JComboBox cbRoadCondition1;
+    private JComboBox cbRoadCondition0;
+    private JComboBox cbRoadCondition2;
+    private JButton btnSimulate;
 
     private Wheel wheel;
     private WheelController controller;
+    private WheelController1 controller1;
+
     private TimeSeries series;
     private double velocity = 150;
 
@@ -75,14 +82,20 @@ public class Main implements ActionListener {
 
     public void initialize() {
         //  POPULATE COMBOBOX.
-//        cbRoadType.setModel(new DefaultComboBoxModel(Constants.ROAD_TYPES.values()));
-        cbRoadType.setVisible(false);
-        lblRoadType.setVisible(false);
         cbRoadCondition.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
+
+        cbRoadCondition0.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
+        cbRoadCondition1.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
+        cbRoadCondition2.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
+
+//        cbRoadCondition0.addActionListener(this);
+//        cbRoadCondition1.addActionListener(this);
+//        cbRoadCondition2.addActionListener(this);
 
         //  SET LISTENERS TO BUTTONS.
         btnStart.addActionListener(this);
         btnBrake.addActionListener(this);
+        btnSimulate.addActionListener(this);
 
         JScrollBar vbar = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
         vbar.addAdjustmentListener(new AdjustmentListener() {
@@ -102,6 +115,7 @@ public class Main implements ActionListener {
 
         JFrame frame = new JFrame("Main");
         frame.setContentPane(mainPanel.jpParent);
+//        frame.setPreferredSize(new Dimension(800, 700));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
@@ -113,7 +127,7 @@ public class Main implements ActionListener {
             System.out.println("Start pressed");
             jpContents.removeAll();
 
-            double initialVelocity = Calculation.convertKmphToMph(Double.parseDouble(txtInitialVelocity.getText()));
+            double initialVelocity = Calculation.convertKmphToMps(Double.parseDouble(txtInitialVelocity.getText()));
             this.wheel = new Wheel(Double.parseDouble(txtRadiusOfWheel.getText()), Double.parseDouble(txtWeight.getText()));
             this.wheel.setVelocity(initialVelocity);
 
@@ -139,6 +153,7 @@ public class Main implements ActionListener {
             if (this.controller != null) this.controller.killThread();
             this.controller = new WheelController(this.wheel, this.series, coeff, coeffK, jpContents, jpHeader);
 
+
             jpContents.removeAll();
             jpContents.revalidate();
 
@@ -156,15 +171,34 @@ public class Main implements ActionListener {
             cp.setPreferredSize(new Dimension(600, 300));
             //  ADD TO THE PANEL
             jpContents.add(cp);
-
             jpContents.revalidate();
 //            //  resize the main jframe.
 //            SwingUtilities.getWindowAncestor(jpParent).pack();
-
-
         } else if (e.getActionCommand().equals(this.btnBrake.getText())) {
             System.out.println(e.getActionCommand() + "Brake Pressed.");
             this.controller.getWheel().setBreaking(!this.controller.getWheel().isBreaking());
+        } else if (e.getActionCommand().equals(this.btnSimulate.getText())) {
+            int roadConditions[] = new int[3];
+            double roadDistances[] = new double[3];
+
+            roadConditions[0] = cbRoadCondition0.getSelectedIndex();
+            roadDistances[0] = Double.parseDouble(txtRoadDistance0.getText());
+            roadConditions[1] = cbRoadCondition1.getSelectedIndex();
+            roadDistances[1] = Double.parseDouble(txtRoadDistance1.getText());
+            roadConditions[2] = cbRoadCondition2.getSelectedIndex();
+            roadDistances[2] = Double.parseDouble(txtRoadDistance2.getText());
+
+            double initialVelocity = Calculation.convertKmphToMps(Double.parseDouble(txtInitialVelocity.getText()));
+            this.wheel = new Wheel(Double.parseDouble(txtRadiusOfWheel.getText()), Double.parseDouble(txtWeight.getText()));
+            this.wheel.setVelocity(initialVelocity);
+
+
+            this.controller1 = new WheelController1(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
+
+            Thread t = new Thread(controller1);
+            t.start();
+
+
         } else {
             System.out.println("Unhandled Event: " + e.getActionCommand());
         }
