@@ -2,12 +2,16 @@ package com.frauas.his.rt.controller;
 
 import com.frauas.his.rt.gui.Chart;
 import com.frauas.his.rt.gui.XYChart;
+import com.frauas.his.rt.listeners.ChartHelper;
 import com.frauas.his.rt.listeners.UIUpdater;
 import com.frauas.his.rt.models.Output;
 import com.frauas.his.rt.models.Wheel;
 import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.utils.Constants;
 import org.jfree.chart.ChartPanel;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import java.awt.*;
@@ -147,7 +151,7 @@ public class WheelController1 implements Runnable {
 
             @Override
             public void run() {
-                time = time + 0.15f;
+                time = time + (1f / PULSE_RATE);
                 decreaseInSpeedPerPulse = decrement.get(index);
                 vVehicle -= decreaseInSpeedPerPulse;
 
@@ -194,8 +198,7 @@ public class WheelController1 implements Runnable {
                         + "\t"
                         + slip);
 
-
-//                try {
+                //  CHANGE TO NEXT ROAD CONDITION IF
                 if (vVehicle < nextV) {
                     if (index + 1 >= velocity.size()) {
                         nextV = 0;
@@ -208,8 +211,6 @@ public class WheelController1 implements Runnable {
                     }
                     decreaseInSpeedPerPulse = decrement.get(index);
                 }
-//                } catch (Exception ex) {
-//                }
             }
         };
 
@@ -395,27 +396,61 @@ public class WheelController1 implements Runnable {
     }
 
     private void createGraphs() {
-        final Chart chart = new Chart();
-        ChartPanel cp = new ChartPanel(chart.createChart(vWheelOutput, vVehicleOutput,
-                "Wheel",
-                "Time",
-                "Speed"));
-        cp.setPreferredSize(new Dimension(500, 300));
+//        //  VELOCITY VS TIME GRAPH
+//        final Chart chart = new Chart();
+//        ChartPanel cp = new ChartPanel(chart.createChart(vWheelOutput, vVehicleOutput,
+//                "Wheel",
+//                "Time",
+//                "Speed"));
+//        cp.setPreferredSize(new Dimension(500, 300));
 
-        ChartPanel cp1 = new ChartPanel(new XYChart().createChart(vWheelOutput, "Slip Vs Time", "Time", "Slip"));
+        //  VELOCITY VS TIME GRAPH NEW.
+        XYChart c1 = new XYChart();
+        c1.setHelper(new ChartHelper() {
+            @Override
+            public XYDataset createDataset(List<Output> data, String title) {
+                XYSeries s1 = new XYSeries(title);
+                XYSeries s2 = new XYSeries(title);
+                data.forEach(x -> {
+                    s1.add(x.getTime(), Calculation.convertMpsToKmph(x.getVelocity()));
+                    s2.add(x.getTime(), Calculation.convertMpsToKmph(vVehicleOutput.get(data.indexOf(x)).getVelocity()));
+                });
+                XYSeriesCollection coll = new XYSeriesCollection();
+                coll.addSeries(s1);
+                coll.addSeries(s2);
+                return coll;
+            }
+        });
+        ChartPanel cp2 = new ChartPanel(c1.createChart(vWheelOutput, "Velocity vs Time", "Time", "Velocity"));
+        cp2.setPreferredSize(new Dimension(500, 300));
+
+        //  SLIP VS TIME GRAPH
+        XYChart c = new XYChart();
+        c.setHelper(new ChartHelper() {
+            @Override
+            public XYDataset createDataset(List<Output> data, String title) {
+                XYSeries series = new XYSeries(title);
+                data.forEach(x -> {
+                    series.add(x.getTime(), x.getSlip());
+                });
+                XYSeriesCollection coll = new XYSeriesCollection();
+                coll.addSeries(series);
+                return coll;
+            }
+        });
+        ChartPanel cp1 = new ChartPanel(c.createChart(vWheelOutput, "Slip Vs Time", "Time", "Slip"));
         cp1.setPreferredSize(new Dimension(500, 300));
         cp1.getChart().getXYPlot().getRangeAxis().setRange(0, 1);
 
+        //  SET GRAPHS TO THE UI.
         this.jpContent.removeAll();
-        this.jpContent.add(cp);
+//        this.jpContent.add(cp);
+        this.jpContent.add(cp2);
         this.jpContent.add(cp1);
-
         this.jpContent.revalidate();
     }
 
     private void updateUI() {
         this.listener.update(totalStoppingDist, totalTime, totalStoppingDistNoABS, totalTimeNoABS, 0);
     }
-
-    ;
 }

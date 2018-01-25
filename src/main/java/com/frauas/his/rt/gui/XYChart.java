@@ -1,5 +1,6 @@
 package com.frauas.his.rt.gui;
 
+import com.frauas.his.rt.listeners.ChartHelper;
 import com.frauas.his.rt.listeners.UIUpdater;
 import com.frauas.his.rt.models.Output;
 import org.jfree.chart.ChartFactory;
@@ -16,12 +17,18 @@ import java.util.List;
 public class XYChart extends JPanel {
     UIUpdater listener;
 
+    ChartHelper helper;
+
     public XYChart() {
         super();
     }
 
+    public void setHelper(ChartHelper helper) {
+        this.helper = helper;
+    }
+
     public JFreeChart createChart(List<Output> data, String title, String xLabel, String yLabel) {
-        XYDataset dataset = createDataSeries(data, title);
+        XYDataset dataset = this.helper.createDataset(data, title);  //createDataSeries(data, title);
         return ChartFactory.createXYLineChart(title,
                 xLabel,
                 yLabel,

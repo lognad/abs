@@ -80,6 +80,21 @@ public class Main implements ActionListener {
                 }
             }
         });
+        cbRoadCondition0.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int i = cbRoadCondition0.getSelectedIndex();
+                cbRoadCondition1.setSelectedIndex(i);
+                cbRoadCondition2.setSelectedIndex(i);
+            }
+        });
+        cbRoadCondition1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int i = cbRoadCondition1.getSelectedIndex();
+                cbRoadCondition2.setSelectedIndex(i);
+            }
+        });
     }
 
     public void initialize() {

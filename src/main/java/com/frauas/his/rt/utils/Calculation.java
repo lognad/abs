@@ -12,7 +12,7 @@ public class Calculation {
     }
 
     public static double calculateStoppingTime(double initialVelocity, double coefficientOfFriction) {
-        return initialVelocity / (2 * coefficientOfFriction * Constants.ACCELERATION_DUE_TO_GRAVITY);
+        return initialVelocity / (coefficientOfFriction * Constants.ACCELERATION_DUE_TO_GRAVITY);
     }
 
     //  SOMETHING WRONG??
