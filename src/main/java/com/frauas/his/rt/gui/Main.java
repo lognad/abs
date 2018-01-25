@@ -1,6 +1,7 @@
 package com.frauas.his.rt.gui;
 
 import com.frauas.his.rt.controller.WheelController1;
+import com.frauas.his.rt.listeners.UIUpdater;
 import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.controller.WheelController;
 import com.frauas.his.rt.models.Wheel;
@@ -15,10 +16,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
+import java.util.concurrent.TimeUnit;
 
 public class Main implements ActionListener {
 
-    public static DecimalFormat df = new DecimalFormat(".##");
+    public static DecimalFormat df = new DecimalFormat("#.##");
 
     private JPanel jpParent;
     private JScrollPane jspMain;
@@ -82,6 +84,8 @@ public class Main implements ActionListener {
 
     public void initialize() {
         //  POPULATE COMBOBOX.
+
+        hideUnRequired();
         cbRoadCondition.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
 
         cbRoadCondition0.setModel(new DefaultComboBoxModel(Constants.ROAD_CONDITIONS.values()));
@@ -107,6 +111,13 @@ public class Main implements ActionListener {
 //        hbar.setUnitIncrement(2);
 //        hbar.setBlockIncrement(1);
         jpParent.add(vbar, BorderLayout.EAST);
+    }
+
+    private void hideUnRequired() {
+        btnStart.setVisible(false);
+        btnBrake.setVisible(false);
+        cbRoadCondition.setVisible(false);
+
     }
 
     public static void main(String[] args) {
@@ -194,6 +205,14 @@ public class Main implements ActionListener {
 
 
             this.controller1 = new WheelController1(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
+
+            this.controller1.setListener((stoppingDist, stoppingTime, stoppingDistNoABS, stoppingTimeNoABS, deceleration) -> {
+                lblStoppingDistance.setText(df.format(stoppingDist));
+                lblStoppingTime.setText(String.valueOf(df.format(stoppingTime / 1000000000.0d)));
+                lblStoppingDistNoABS.setText(df.format(stoppingDistNoABS));
+                lblStoppingTimeNoABS.setText(String.valueOf(df.format((stoppingTimeNoABS / 1000000000.0d))));
+                lblDeceleration.setText(String.valueOf(deceleration));
+            });
 
             Thread t = new Thread(controller1);
             t.start();

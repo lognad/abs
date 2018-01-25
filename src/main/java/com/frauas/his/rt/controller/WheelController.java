@@ -114,7 +114,7 @@ public class WheelController implements Runnable {
         }
 
         //  SHOW OTHER STATIC CHARTS HERE.
-        final Chart chartWheel = new Chart("SPEED VS TIME", vOutput);
+        final Chart chartWheel = new Chart();
         ChartPanel cp = new ChartPanel(chartWheel.createChart(vOutput,
                 "Wheel",
                 "Time",
@@ -122,7 +122,7 @@ public class WheelController implements Runnable {
         cp.setPreferredSize(new Dimension(500, 300));
 
 
-        final Chart chartVehicle = new Chart("SPEED VS TIME", vVehicleOutput);
+        final Chart chartVehicle = new Chart();
         ChartPanel cp1 = new ChartPanel(chartVehicle.createChart(vVehicleOutput,
                 "Vehicle",
                 "Time",

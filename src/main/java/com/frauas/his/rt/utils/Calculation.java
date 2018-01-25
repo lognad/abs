@@ -19,10 +19,10 @@ public class Calculation {
     public static double calculateDeceleration(double initialVelocity, double distance) {
         return -((initialVelocity * initialVelocity) / (2 * distance));
     }
-//
-//    public static double calculateStoppingDistanceNoABS(double velocity, double coefficientOfFriction){
-//
-//    }
+
+    public static double calculateVeloctiy(double velocity, double stoppingDistance, double deceleration) {
+        return Math.sqrt(Math.abs(velocity * velocity + 2 * deceleration * stoppingDistance));
+    }
 
     public static double convertMpsToKmph(double velocityMps) {
         return velocityMps * 18 / 5;

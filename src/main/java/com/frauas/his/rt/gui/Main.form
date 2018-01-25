@@ -35,7 +35,7 @@
                   </component>
                   <component id="7c9ab" class="javax.swing.JLabel" binding="lblWeight">
                     <constraints>
-                      <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                      <grid row="12" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Weight"/>
@@ -43,7 +43,7 @@
                   </component>
                   <component id="bcdaf" class="javax.swing.JTextField" binding="txtWeight">
                     <constraints>
-                      <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
+                      <grid row="13" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
                         <minimum-size width="150" height="-1"/>
                         <preferred-size width="150" height="-1"/>
                         <maximum-size width="150" height="-1"/>
@@ -55,7 +55,7 @@
                   </component>
                   <component id="f6467" class="javax.swing.JLabel" binding="lblRadiusOfWheel">
                     <constraints>
-                      <grid row="12" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                      <grid row="14" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Radius"/>
@@ -63,7 +63,7 @@
                   </component>
                   <component id="c0db3" class="javax.swing.JTextField" binding="txtRadiusOfWheel">
                     <constraints>
-                      <grid row="13" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
+                      <grid row="15" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
                         <minimum-size width="150" height="-1"/>
                         <preferred-size width="150" height="-1"/>
                         <maximum-size width="150" height="-1"/>
@@ -73,40 +73,12 @@
                       <text value="0.3"/>
                     </properties>
                   </component>
-                  <component id="db473" class="javax.swing.JLabel" binding="lblInitialVelocity">
-                    <constraints>
-                      <grid row="14" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="InitialVelocity (Kmph)"/>
-                    </properties>
-                  </component>
-                  <component id="85e7a" class="javax.swing.JTextField" binding="txtInitialVelocity">
-                    <constraints>
-                      <grid row="15" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
-                        <minimum-size width="150" height="-1"/>
-                        <preferred-size width="150" height="-1"/>
-                        <maximum-size width="150" height="-1"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <text value="180"/>
-                    </properties>
-                  </component>
                   <component id="5a2d6" class="javax.swing.JButton" binding="btnBrake">
                     <constraints>
                       <grid row="17" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Brake"/>
-                    </properties>
-                  </component>
-                  <component id="14190" class="javax.swing.JComboBox" binding="cbRoadCondition">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <model/>
                     </properties>
                   </component>
                   <component id="779a3" class="javax.swing.JButton" binding="btnStart">
@@ -127,7 +99,7 @@
                   </component>
                   <component id="280a6" class="javax.swing.JTextField" binding="txtRoadDistance0">
                     <constraints>
-                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -138,7 +110,7 @@
                   </component>
                   <component id="84e75" class="javax.swing.JTextField" binding="txtRoadDistance1">
                     <constraints>
-                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
+                      <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -149,7 +121,7 @@
                   </component>
                   <component id="48e12" class="javax.swing.JTextField" binding="txtRoadDistance2">
                     <constraints>
-                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
+                      <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="1" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>
                       </grid>
                     </constraints>
@@ -160,28 +132,56 @@
                   </component>
                   <component id="af1e4" class="javax.swing.JComboBox" binding="cbRoadCondition1">
                     <constraints>
-                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                   </component>
                   <component id="ea315" class="javax.swing.JComboBox" binding="cbRoadCondition0">
                     <constraints>
-                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                   </component>
                   <component id="30d2d" class="javax.swing.JComboBox" binding="cbRoadCondition2">
                     <constraints>
-                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                      <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties/>
                   </component>
                   <component id="58951" class="javax.swing.JButton" binding="btnSimulate">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false"/>
+                      <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Simulate"/>
+                    </properties>
+                  </component>
+                  <component id="db473" class="javax.swing.JLabel" binding="lblInitialVelocity">
+                    <constraints>
+                      <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="InitialVelocity (Kmph)"/>
+                    </properties>
+                  </component>
+                  <component id="85e7a" class="javax.swing.JTextField" binding="txtInitialVelocity">
+                    <constraints>
+                      <grid row="11" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="8" fill="0" indent="1" use-parent-layout="false">
+                        <minimum-size width="150" height="-1"/>
+                        <preferred-size width="150" height="-1"/>
+                        <maximum-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <text value="180"/>
+                    </properties>
+                  </component>
+                  <component id="14190" class="javax.swing.JComboBox" binding="cbRoadCondition">
+                    <constraints>
+                      <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <model/>
                     </properties>
                   </component>
                 </children>
