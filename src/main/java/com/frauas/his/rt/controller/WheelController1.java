@@ -1,6 +1,5 @@
 package com.frauas.his.rt.controller;
 
-import com.frauas.his.rt.gui.Chart;
 import com.frauas.his.rt.gui.XYChart;
 import com.frauas.his.rt.listeners.ChartHelper;
 import com.frauas.his.rt.listeners.UIUpdater;
@@ -22,6 +21,8 @@ import java.util.Timer;
 public class WheelController1 implements Runnable {
 
     UIUpdater listener;
+
+
     private Wheel wheel;
     private int[] roadCondition = new int[3];
     private double[] roadDistance = new double[3];
@@ -79,13 +80,19 @@ public class WheelController1 implements Runnable {
         vWheelOutput.add(new Output(this.wheel.getVelocity(), time, 0));
         vVehicleOutput.add(new Output(vVehicle, time, 0));
 
+        s1 = new XYSeries("Velocity vs Time");
+        s2 = new XYSeries("Slip vs Time");
+
+        createGraphs();
+        c.revalidate();
+        c1.revalidate();
+//        updateUI();
+
         applyBrakeWithoutABS();
         applyBrakeNew();
 //        applyBrakeCompound();
 //        applyBrake();
 //        }
-
-
     }
 
 
@@ -130,12 +137,18 @@ public class WheelController1 implements Runnable {
         decrement.add(decrement2);
         decrement.add(decrement3);
 
+        sd1 = Double.isNaN(sd1) ? 0 : sd1;
+        sd2 = Double.isNaN(sd2) ? 0 : sd2;
+        sd3 = Double.isNaN(sd3) ? 0 : sd3;
+
         sd = sd1 + sd2 + sd3;
         double st = st1 + st2 + st3;
+        System.out.println("\n\n\n");
         System.out.println("velocity: \tv1 -> " + v1 + "\t+\tv2 -> " + v2 + "\t+\tv3 -> " + v3);
         System.out.println("sd:\t" + sd1 + "\t+\t" + sd2 + "\t+\t" + sd3 + "\t=\t" + sd);
         System.out.println("decrement:\t" + decrement1 + "\t+\t" + decrement2 + "\t+\t" + decrement3);
         System.out.println("st:\t" + st1 + "\t+\t" + st2 + "\t+\t" + st3 + "\t=\t" + st);
+
 
         totalStoppingDist = sd;
 
@@ -162,6 +175,13 @@ public class WheelController1 implements Runnable {
 
                     vWheelOutput.add(new Output(wheel.getVelocity(), time, slip));
                     vVehicleOutput.add(new Output(vVehicle, time, slip));
+
+                    s1.add(time, wheel.getVelocity());
+                    s2.add(time, vVehicle);
+                    c1.revalidate();
+                    c.revalidate();
+                    jpContent.revalidate();
+
                     System.out.println("Stopped\t" + wheel.getVelocity() + "\t" + vVehicle);
                     cancel();
 
@@ -169,7 +189,7 @@ public class WheelController1 implements Runnable {
                     totalTime = System.nanoTime() - totalTime;
 
                     //  GENERATE GRAPHS.
-                    createGraphs();
+//                    createGraphs();
                     updateUI();
                     return;
                 }
@@ -190,13 +210,19 @@ public class WheelController1 implements Runnable {
                 vWheelOutput.add(new Output(wheel.getVelocity(), time, slip));
                 vVehicleOutput.add(new Output(vVehicle, time, slip));
 
-                System.out.println(time
-                        + "\t"
-                        + Calculation.convertMpsToKmph(wheel.getVelocity())
-                        + "\t"
-                        + Calculation.convertMpsToKmph(vVehicle)
-                        + "\t"
-                        + slip);
+                s1.add(time, Calculation.convertMpsToKmph(wheel.getVelocity()));
+                s2.add(time, Calculation.convertMpsToKmph(vVehicle));
+                series.add(time, slip);
+                c1.revalidate();
+                c.revalidate();
+//                jpContent.revalidate();
+//                System.out.println(time
+//                        + "\t"
+//                        + Calculation.convertMpsToKmph(wheel.getVelocity())
+//                        + "\t"
+//                        + Calculation.convertMpsToKmph(vVehicle)
+//                        + "\t"
+//                        + slip);
 
                 //  CHANGE TO NEXT ROAD CONDITION IF
                 if (vVehicle < nextV) {
@@ -345,7 +371,6 @@ public class WheelController1 implements Runnable {
 
     private void applyBrakeWithoutABS() {
         double sd = 0;
-//        System.out.println("Initial Velocity(mps): " + this.wheel.getVelocity());
 
         //  ROAD_CONDITION_1
         double v1 = this.wheel.getVelocity();
@@ -354,9 +379,7 @@ public class WheelController1 implements Runnable {
         if (sd1 > roadDistance[0]) {
             sd1 = roadDistance[0];
         }
-//        double st1 = Calculation.calculateStoppingTime(v1, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
         double d1 = Calculation.calculateDeceleration(v1, sd);
-//        double decrement1 = Math.abs(d1) / PULSE_RATE;
 
         //  ROAD_CONDITION_2
         double v2 = Calculation.calculateVeloctiy(v1, sd1, d1);
@@ -364,53 +387,50 @@ public class WheelController1 implements Runnable {
         double sd2 = sd;
         if (sd2 > roadDistance[1])
             sd2 = roadDistance[1];
-//        double st2 = Calculation.calculateStoppingTime(v2, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[1]].getCoeff());
         double d2 = Calculation.calculateDeceleration(v2, sd);
-//        double decrement2 = Math.abs(d2) / PULSE_RATE;
 
         //  ROAD_CONDITION_3
         double v3 = Calculation.calculateVeloctiy(v2, sd2, d2);
         double sd3 = Calculation.calculateStoppingDistance(v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[2]].getCoeff());
-//        double st3 = Calculation.calculateStoppingTime(v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[2]].getCoeff());
-//        double d3 = Calculation.calculateDeceleration(v3, sd3);
-//        double decrement3 = Math.abs(d3) / PULSE_RATE;
 
-//
-//        velocity.add(v1);
-//        velocity.add(v2);
-//        velocity.add(v3);
-//
-//        decrement.add(decrement1);
-//        decrement.add(decrement2);
-//        decrement.add(decrement3);
+        //  CALCULATE STOPPING TIME.
+        double t1 = Calculation.calculateStoppingTime(v2 - v1, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
+        double t2 = Calculation.calculateStoppingTime(v3 - v2, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
+        double t3 = Calculation.calculateStoppingTime(v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[2]].getCoeff());
+        //  CHECK FOR NaN.
+        t1 = Double.isNaN(t1) ? 0 : t1;
+        t2 = Double.isNaN(t2) ? 0 : t2;
+        t3 = Double.isNaN(t3) ? 0 : t3;
+        totalTimeNoABS = t1 + t2 + t3;
+        System.out.println("TOTAL STOPPING TIME NO ABS: " + totalTimeNoABS);
+
+        sd1 = Double.isNaN(sd1) ? 0 : sd1;
+        sd2 = Double.isNaN(sd2) ? 0 : sd2;
+        sd3 = Double.isNaN(sd3) ? 0 : sd3;
 
         sd = sd1 + sd2 + sd3;
-//        double st = st1 + st2 + st3;
         System.out.println("OUTPUTS WITHOUT ABS: ");
         System.out.println("velocity: \tv1 -> " + v1 + "\t+\tv2 -> " + v2 + "\t+\tv3 -> " + v3);
         System.out.println("sd:\t" + sd1 + "\t+\t" + sd2 + "\t+\t" + sd3 + "\t=\t" + sd);
-//        System.out.println("decrement:\t" + decrement1 + "\t+\t" + decrement2 + "\t+\t" + decrement3);
-//        System.out.println("st:\t" + st1 + "\t+\t" + st2 + "\t+\t" + st3 + "\t=\t" + st);
 
         totalStoppingDistNoABS = sd;
     }
 
-    private void createGraphs() {
-//        //  VELOCITY VS TIME GRAPH
-//        final Chart chart = new Chart();
-//        ChartPanel cp = new ChartPanel(chart.createChart(vWheelOutput, vVehicleOutput,
-//                "Wheel",
-//                "Time",
-//                "Speed"));
-//        cp.setPreferredSize(new Dimension(500, 300));
 
-        //  VELOCITY VS TIME GRAPH NEW.
-        XYChart c1 = new XYChart();
+    XYSeries s1;
+    XYSeries s2;
+    XYChart c1;
+    XYChart c;
+    XYSeries series;
+
+    private void createGraphs() {
+        //  VELOCITY VS TIME GRAPH.
+        c1 = new XYChart();
         c1.setHelper(new ChartHelper() {
             @Override
             public XYDataset createDataset(List<Output> data, String title) {
-                XYSeries s1 = new XYSeries(title);
-                XYSeries s2 = new XYSeries(title);
+//                s1 = new XYSeries(title);
+//                s2 = new XYSeries(title);
                 data.forEach(x -> {
                     s1.add(x.getTime(), Calculation.convertMpsToKmph(x.getVelocity()));
                     s2.add(x.getTime(), Calculation.convertMpsToKmph(vVehicleOutput.get(data.indexOf(x)).getVelocity()));
@@ -423,13 +443,15 @@ public class WheelController1 implements Runnable {
         });
         ChartPanel cp2 = new ChartPanel(c1.createChart(vWheelOutput, "Velocity vs Time", "Time", "Velocity"));
         cp2.setPreferredSize(new Dimension(500, 300));
+//        cp2.getChart().getXYPlot().getRangeAxis().setRange(0, totalStoppingDist);
 
         //  SLIP VS TIME GRAPH
-        XYChart c = new XYChart();
+        c = new XYChart();
         c.setHelper(new ChartHelper() {
             @Override
             public XYDataset createDataset(List<Output> data, String title) {
-                XYSeries series = new XYSeries(title);
+//                XYSeries series = new XYSeries(title);
+                series = new XYSeries(title);
                 data.forEach(x -> {
                     series.add(x.getTime(), x.getSlip());
                 });

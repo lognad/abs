@@ -6,6 +6,7 @@ import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.controller.WheelController;
 import com.frauas.his.rt.models.Wheel;
 import com.frauas.his.rt.utils.Constants;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.Millisecond;
@@ -52,6 +53,7 @@ public class Main implements ActionListener {
     private JComboBox cbRoadCondition0;
     private JComboBox cbRoadCondition2;
     private JButton btnSimulate;
+    private JLabel lblDec;
 
     private Wheel wheel;
     private WheelController controller;
@@ -132,6 +134,13 @@ public class Main implements ActionListener {
         btnStart.setVisible(false);
         btnBrake.setVisible(false);
         cbRoadCondition.setVisible(false);
+        lblDec.setVisible(false);
+        lblDeceleration.setVisible(false);
+
+        lblWeight.setVisible(false);
+        txtWeight.setVisible(false);
+        lblRadiusOfWheel.setVisible(false);
+        txtRadiusOfWheel.setVisible(false);
 
     }
 
@@ -222,11 +231,14 @@ public class Main implements ActionListener {
             this.controller1 = new WheelController1(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
 
             this.controller1.setListener((stoppingDist, stoppingTime, stoppingDistNoABS, stoppingTimeNoABS, deceleration) -> {
+                System.out.println(stoppingTime + "STOPPING TIME NO ABS ----------> " + stoppingTimeNoABS);
                 lblStoppingDistance.setText(df.format(stoppingDist));
                 lblStoppingTime.setText(String.valueOf(df.format(stoppingTime / 1000000000.0d)));
                 lblStoppingDistNoABS.setText(df.format(stoppingDistNoABS));
-                lblStoppingTimeNoABS.setText(String.valueOf(df.format((stoppingTimeNoABS / 1000000000.0d))));
+                lblStoppingTimeNoABS.setText(String.valueOf(df.format((stoppingTimeNoABS))));
                 lblDeceleration.setText(String.valueOf(deceleration));
+
+                jpContents.revalidate();
             });
 
             Thread t = new Thread(controller1);
