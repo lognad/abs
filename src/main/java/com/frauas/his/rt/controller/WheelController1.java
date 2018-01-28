@@ -394,15 +394,15 @@ public class WheelController1 implements Runnable {
         double sd3 = Calculation.calculateStoppingDistance(v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[2]].getCoeff());
 
         //  CALCULATE STOPPING TIME.
-        double t1 = Calculation.calculateStoppingTime(v2 - v1, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
-        double t2 = Calculation.calculateStoppingTime(v3 - v2, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
+        double t1 = Calculation.calculateStoppingTime(v1 - v2, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[0]].getCoeff());
+        double t2 = Calculation.calculateStoppingTime(v2 - v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[1]].getCoeff());
         double t3 = Calculation.calculateStoppingTime(v3, Constants.ROAD_CONDITIONS_KINETIC.values()[roadCondition[2]].getCoeff());
         //  CHECK FOR NaN.
         t1 = Double.isNaN(t1) ? 0 : t1;
         t2 = Double.isNaN(t2) ? 0 : t2;
         t3 = Double.isNaN(t3) ? 0 : t3;
         totalTimeNoABS = t1 + t2 + t3;
-        System.out.println("TOTAL STOPPING TIME NO ABS: " + totalTimeNoABS);
+        System.out.println(t1 + "+" + t2 + "+" + t3 + ":\tTOTAL STOPPING TIME NO ABS: " + totalTimeNoABS);
 
         sd1 = Double.isNaN(sd1) ? 0 : sd1;
         sd2 = Double.isNaN(sd2) ? 0 : sd2;

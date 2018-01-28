@@ -21,7 +21,10 @@ public class Calculation {
     }
 
     public static double calculateVeloctiy(double velocity, double stoppingDistance, double deceleration) {
-        return Math.sqrt(Math.abs(velocity * velocity + 2 * deceleration * stoppingDistance));
+//        return Math.sqrt(Math.abs(velocity * velocity + 2 * deceleration * stoppingDistance));
+        double v = velocity * velocity + 2 * deceleration * stoppingDistance;
+        if (v <= 0) return 0;
+        else return Math.sqrt(v);
     }
 
     public static double convertMpsToKmph(double velocityMps) {

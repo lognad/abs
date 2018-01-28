@@ -227,7 +227,6 @@ public class Main implements ActionListener {
             this.wheel = new Wheel(Double.parseDouble(txtRadiusOfWheel.getText()), Double.parseDouble(txtWeight.getText()));
             this.wheel.setVelocity(initialVelocity);
 
-
             this.controller1 = new WheelController1(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
 
             this.controller1.setListener((stoppingDist, stoppingTime, stoppingDistNoABS, stoppingTimeNoABS, deceleration) -> {
