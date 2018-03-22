@@ -15,7 +15,6 @@ public class Calculation {
         return initialVelocity / (coefficientOfFriction * Constants.ACCELERATION_DUE_TO_GRAVITY);
     }
 
-    //  SOMETHING WRONG??
     public static double calculateDeceleration(double initialVelocity, double distance) {
         return -((initialVelocity * initialVelocity) / (2 * distance));
     }
