@@ -1,9 +1,10 @@
 package com.frauas.his.rt;
 
-import com.frauas.his.rt.controller.WheelController1;
+import com.frauas.his.rt.controller.WheelController;
 import com.frauas.his.rt.models.Wheel;
 import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.utils.Constants;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -23,18 +24,13 @@ public class Simulate {
 
     @Test
     public void Test2() {
-        int roadConditions[] = new int[]{0, 1, 2};
-        double roadDistances[] = new double[]{50, 60, 200};
+//        int roadConditions[] = new int[]{0, 1, 2};
+//        double roadDistances[] = new double[]{50, 60, 200};
         double initialVelocity = Calculation.convertKmphToMps(Double.parseDouble("180"));
+        Assert.assertEquals(50.0, initialVelocity, 0.0);
 
-        Wheel wheel = new Wheel(Double.parseDouble("50"), Double.parseDouble("1200"));
-        wheel.setVelocity(initialVelocity);
-
-
-        WheelController1 controller1 = new WheelController1(wheel, roadConditions, roadDistances, null, null);
-        controller1.run();
-//        Thread t = new Thread(controller1);
-//        t.start();
+        double initialVelocity1 = Calculation.convertMpsToKmph(Double.parseDouble("50"));
+        Assert.assertEquals(180.0, initialVelocity1, 0.0);
     }
 
     @Test
@@ -44,6 +40,17 @@ public class Simulate {
         System.out.println(TimeUnit.NANOSECONDS.toMillis(time));
 //        System.out.println(TimeUnit.NANOSECONDS.toMinutes(time));
         System.out.println(TimeUnit.SECONDS.convert(time, TimeUnit.NANOSECONDS));
-        System.out.println(time/1000000000.0d);
+        System.out.println(time / 1000000000.0d);
     }
+
+
+    @Test
+    public void Test3(){
+        int[] arr = {5,4,3,2,1,};
+
+        for (int i : arr) {
+            System.out.println(i);
+        }
+    }
+
 }

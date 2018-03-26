@@ -1,12 +1,9 @@
 package com.frauas.his.rt.gui;
 
-import com.frauas.his.rt.controller.WheelController1;
-import com.frauas.his.rt.listeners.UIUpdater;
-import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.controller.WheelController;
+import com.frauas.his.rt.utils.Calculation;
 import com.frauas.his.rt.models.Wheel;
 import com.frauas.his.rt.utils.Constants;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.time.Millisecond;
@@ -17,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.util.concurrent.TimeUnit;
 
 public class Main implements ActionListener {
 
@@ -56,8 +52,7 @@ public class Main implements ActionListener {
     private JLabel lblDec;
 
     private Wheel wheel;
-    private WheelController controller;
-    private WheelController1 controller1;
+    private WheelController wheelController;
 
     private TimeSeries series;
     private double velocity = 150;
@@ -125,8 +120,6 @@ public class Main implements ActionListener {
                 vbar.repaint();
             }
         });
-//        hbar.setUnitIncrement(2);
-//        hbar.setBlockIncrement(1);
         jpParent.add(vbar, BorderLayout.EAST);
     }
 
@@ -141,7 +134,6 @@ public class Main implements ActionListener {
         txtWeight.setVisible(false);
         lblRadiusOfWheel.setVisible(false);
         txtRadiusOfWheel.setVisible(false);
-
     }
 
     public static void main(String[] args) {
@@ -158,7 +150,7 @@ public class Main implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand().equals(btnStart.getText())) {
+        /*if (e.getActionCommand().equals(btnStart.getText())) {
             System.out.println("Start pressed");
             jpContents.removeAll();
 
@@ -184,16 +176,8 @@ public class Main implements ActionListener {
 
             System.out.println("COEFF: " + coeff);
 
-            //  STOP EXISTING THREAD IF ANY.
-            if (this.controller != null) this.controller.killThread();
-            this.controller = new WheelController(this.wheel, this.series, coeff, coeffK, jpContents, jpHeader);
-
-
             jpContents.removeAll();
             jpContents.revalidate();
-
-            td = new Thread(this.controller);
-            td.start();
 
             //  GENERATING TEST SERIES RANDOMLY.
             final TimeSeriesCollection dataset = new TimeSeriesCollection(series);
@@ -211,8 +195,8 @@ public class Main implements ActionListener {
 //            SwingUtilities.getWindowAncestor(jpParent).pack();
         } else if (e.getActionCommand().equals(this.btnBrake.getText())) {
             System.out.println(e.getActionCommand() + "Brake Pressed.");
-            this.controller.getWheel().setBreaking(!this.controller.getWheel().isBreaking());
-        } else if (e.getActionCommand().equals(this.btnSimulate.getText())) {
+        } else */
+        if (e.getActionCommand().equals(this.btnSimulate.getText())) {
             int roadConditions[] = new int[3];
             double roadDistances[] = new double[3];
 
@@ -227,9 +211,9 @@ public class Main implements ActionListener {
             this.wheel = new Wheel(Double.parseDouble(txtRadiusOfWheel.getText()), Double.parseDouble(txtWeight.getText()));
             this.wheel.setVelocity(initialVelocity);
 
-            this.controller1 = new WheelController1(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
+            this.wheelController = new WheelController(this.wheel, roadConditions, roadDistances, jpHeader, jpContents);
 
-            this.controller1.setListener((stoppingDist, stoppingTime, stoppingDistNoABS, stoppingTimeNoABS, deceleration) -> {
+            this.wheelController.setListener((stoppingDist, stoppingTime, stoppingDistNoABS, stoppingTimeNoABS, deceleration) -> {
                 System.out.println(stoppingTime + "STOPPING TIME NO ABS ----------> " + stoppingTimeNoABS);
                 lblStoppingDistance.setText(df.format(stoppingDist));
                 lblStoppingTime.setText(String.valueOf(df.format(stoppingTime / 1000000000.0d)));
@@ -240,10 +224,8 @@ public class Main implements ActionListener {
                 jpContents.revalidate();
             });
 
-            Thread t = new Thread(controller1);
+            Thread t = new Thread(wheelController);
             t.start();
-
-
         } else {
             System.out.println("Unhandled Event: " + e.getActionCommand());
         }

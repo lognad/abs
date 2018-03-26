@@ -44,10 +44,10 @@ public class Constants {
         }
     }
 
-    public enum ROAD_TYPES {
-        DIRT,
-        GRAVELLED,
-        PAVED
-    }
+//    public enum ROAD_TYPES {
+//        DIRT,
+//        GRAVELLED,
+//        PAVED
+//    }
 
 }
